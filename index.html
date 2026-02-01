@@ -24,9 +24,15 @@ text-align:center;
 .bunny{
 width:140px;
 position:absolute;
-top:-160px;
+top:-150px;
 left:50%;
 transform:translateX(-50%);
+animation:sway 1.5s infinite alternate;
+}
+
+@keyframes sway{
+from{transform:translateX(-50%) rotate(-6deg)}
+to{transform:translateX(-50%) rotate(6deg)}
 }
 
 .box{
@@ -34,23 +40,30 @@ background:white;
 padding:40px;
 border-radius:20px;
 box-shadow:0 6px 18px rgba(0,0,0,.2);
-min-width:280px;
+min-width:300px;
+position:relative;
 }
 
 .question{
 font-size:26px;
-margin-bottom:15px;
+margin-bottom:12px;
 }
 
-.speech{
+.bubble{
 background:#fff0f6;
 border:2px solid #d81b60;
-padding:10px 15px;
 border-radius:15px;
-margin-bottom:15px;
+padding:10px;
+margin-bottom:18px;
 color:#d81b60;
 font-size:18px;
 min-height:28px;
+}
+
+.buttons{
+display:flex;
+justify-content:center;
+gap:20px;
 }
 
 button{
@@ -59,18 +72,18 @@ padding:12px 32px;
 border-radius:15px;
 border:none;
 cursor:pointer;
+transition:transform .3s ease;
 }
 
 #yesBtn{
 background:#d81b60;
 color:white;
-transition:transform .3s ease;
 }
 
 #noBtn{
 background:gray;
 color:white;
-position:absolute;
+position:fixed;
 }
 
 .celebration{
@@ -81,6 +94,7 @@ display:none;
 justify-content:center;
 align-items:center;
 flex-direction:column;
+overflow:hidden;
 }
 
 .love{
@@ -92,124 +106,15 @@ margin-top:20px;
 
 @keyframes glow{
 from{ text-shadow:0 0 10px #ff5fa2;}
-to{ text-shadow:0 0 30px #ff2f85;}
+to{ text-shadow:0 0 35px #ff2f85;}
 }
 
 .firework{
 position:absolute;
 font-size:40px;
-animation:explode 1.3s ease-out forwards;
+animation:explode 1.2s ease-out forwards;
 }
 
 @keyframes explode{
 0%{transform:translate(0,0);opacity:1}
-100%{transform:translate(var(--x),var(--y));opacity:0}
-}
-</style>
-</head>
-
-<body>
-
-<!-- Romantic music -->
-<audio autoplay loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
-</audio>
-
-<div class="container">
-
-<!-- Animated Bugs Bunny (GIF) -->
-<img id="bunny" class="bunny"
-src="https://media.tenor.com/qWw6d7k7c9sAAAAi/bugs-bunny.gif">
-
-<div class="box">
-<div class="question">
-Joanne, will you be my Valentine? 💖
-</div>
-
-<div id="speech" class="speech"></div>
-
-<button id="yesBtn">Yes</button>
-</div>
-
-<button id="noBtn">No</button>
-
-</div>
-
-<div id="celebration" class="celebration">
-<img class="bunny" 
-src="https://media.tenor.com/6u7Z4Rr0C9kAAAAi/bugs-bunny-dance.gif">
-<div class="love">I Love You ❤️</div>
-</div>
-
-<script>
-
-const noBtn=document.getElementById("noBtn");
-const yesBtn=document.getElementById("yesBtn");
-const speech=document.getElementById("speech");
-const bunny=document.getElementById("bunny");
-const celebration=document.getElementById("celebration");
-
-let yesScale=1;
-let count=0;
-
-const lines=[
-"Are you sure? 🥺",
-"Think again 💗",
-"Don't break my heart 😢",
-"One more chance?",
-"Please say yes 💕"
-];
-
-function moveNo(){
-const x=Math.random()*(window.innerWidth-120);
-const y=Math.random()*(window.innerHeight-80);
-
-noBtn.style.left=x+"px";
-noBtn.style.top=y+"px";
-
-yesScale+=0.25;
-yesBtn.style.transform=`scale(${yesScale})`;
-
-speech.innerText=lines[count%lines.length];
-count++;
-
-bunny.src="https://media.tenor.com/fvN5lHfJcNQAAAAi/bugs-bunny-sad.gif";
-}
-
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("touchstart",moveNo);
-
-yesBtn.onclick=()=>{
-celebration.style.display="flex";
-
-for(let i=0;i<120;i++){
-createFirework();
-}
-};
-
-function createFirework(){
-const f=document.createElement("div");
-f.className="firework";
-f.innerText=Math.random()>0.5?"🎆":"🎉";
-
-const startX=Math.random()*window.innerWidth;
-const startY=Math.random()*window.innerHeight;
-
-const moveX=(Math.random()-0.5)*700+"px";
-const moveY=(Math.random()-0.5)*700+"px";
-
-f.style.left=startX+"px";
-f.style.top=startY+"px";
-
-f.style.setProperty("--x",moveX);
-f.style.setProperty("--y",moveY);
-
-celebration.appendChild(f);
-
-setTimeout(()=>f.remove(),1300);
-}
-
-</script>
-
-</body>
-</html>
+100%{transform:translate(var(--x),var(--y));op
