@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+
+<style>
+body {
+    margin: 0;
+    background: #ffd6e7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    text-align: center;
+}
+
+.bunny {
+    font-size: 90px;
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: sway 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes sway {
+    0% { transform: translateX(-50%) rotate(-6deg); }
+    100% { transform: translateX(-50%) rotate(6deg); }
+}
+
+.box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.question {
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.subtext {
+    font-size: 18px;
+    color: #d81b60;
+    height: 25px;
+}
+
+button {
+    font-size: 20px;
+    padding: 12px 32px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#yesBtn {
+    background: #d81b60;
+    color: white;
+}
+
+#noBtn {
+    background: gray;
+    color: white;
+    position: absolute;
+}
+
+.celebration {
+    position: fixed;
+    inset: 0;
+    background: #ffd6e7;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.danceBunny {
+    font-size: 120px;
+    animation: dance 0.5s infinite alternate;
+}
+
+@keyframes dance {
+    0% { transform: rotate(-12deg) scale(1); }
+    100% { transform: rotate(12deg) scale(1.15); }
+}
+
+.loveText {
+    font-size: 60px;
+    color: #d81b60;
+    margin-top: 30px;
+    animation: glow 1.2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff5fa2; }
+    to { text-shadow: 0 0 25px #ff2f85; }
+}
+
+.firework {
+    position: absolute;
+    font-size: 35px;
+    animation: explode 1.2s ease-out forwards;
+}
+
+@keyframes explode {
+    0% { transform: translate(0,0); opacity:1;}
+    100% { transform: translate(var(--x), var(--y)); opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<div class="container">
+    <div id="bunny" class="bunny">🐰</div>
+
+    <div class="box">
+        <div class="question">
+            Joanne, will you be my Valentine? 💖
+        </div>
+
+        <div id="subtext" class="subtext"></div>
+
+        <button id="yesBtn">Yes</button>
+    </div>
+
+    <button id="noBtn">No</button>
+</div>
+
+<div id="celebration" class="celebration">
+    <div class="danceBunny">🐰🎉</div>
+    <div class="loveText">I Love You ❤️</div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const bunny = document.getElementById("bunny");
+const celebration = document.getElementById("celebration");
+const subtext = document.getElementById("subtext");
+
+let yesSize = 1;
+let noClicks = 0;
+
+const messages = [
+  "Are you sure? 🥺",
+  "Think again 💗",
+  "Don't break my heart 😢",
+  "One more chance? 🐰",
+  "Please say yes 💕"
+];
+
+function teleportNo(){
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 80);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    yesSize += 0.25;
+    yesBtn.style.transform = `scale(${yesSize})`;
+
+    bunny.textContent = "🐰😢";
+    subtext.textContent = messages[noClicks % messages.length];
+    noClicks++;
+}
+
+noBtn.addEventListener("mouseover", teleportNo);
+noBtn.addEventListener("touchstart", teleportNo);
+
+yesBtn.addEventListener("click", () => {
+    celebration.style.display = "flex";
+
+    for(let i=0;i<60;i++){
+        createFirework();
+    }
+});
+
+function createFirework(){
+    const item = document.createElement("div");
+    item.className = "firework";
+    item.textContent = Math.random() > 0.5 ? "🎆" : "🎉";
+
+    const startX = window.innerWidth/2;
+    const startY = window.innerHeight/2;
+
+    const moveX = (Math.random()-0.5)*600 + "px";
+    const moveY = (Math.random()-0.5)*600 + "px";
+
+    item.style.left = startX + "px";
+    item.style.top = startY + "px";
+
+    item.style.setProperty("--x", moveX);
+    item.style.setProperty("--y", moveY);
+
+    celebration.appendChild(item);
+
+    setTimeout(()=>item.remove(),1200);
+}
+</script>
+
+</body>
+</html>
