@@ -12,22 +12,28 @@ display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-overflow:hidden;
 font-family:Arial;
+overflow:hidden;
 }
 
 .container{
 position:relative;
-text-align:center;
 }
 
 .bunny{
-width:140px;
+width:120px;
+height:120px;
+background:#ffb6c1;
+border-radius:50%;
 position:absolute;
-top:-150px;
+top:-140px;
 left:50%;
 transform:translateX(-50%);
 animation:sway 1.5s infinite alternate;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:60px;
 }
 
 @keyframes sway{
@@ -41,7 +47,7 @@ padding:40px;
 border-radius:20px;
 box-shadow:0 6px 18px rgba(0,0,0,.2);
 min-width:300px;
-position:relative;
+text-align:center;
 }
 
 .question{
@@ -94,7 +100,6 @@ display:none;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-overflow:hidden;
 }
 
 .love{
@@ -117,4 +122,110 @@ animation:explode 1.2s ease-out forwards;
 
 @keyframes explode{
 0%{transform:translate(0,0);opacity:1}
-100%{transform:translate(var(--x),var(--y));op
+100%{transform:translate(var(--x),var(--y));opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="bunny" class="bunny">🐰</div>
+
+<div class="box">
+
+<div class="question">
+Joanne, will you be my Valentine? 💖
+</div>
+
+<div id="bubble" class="bubble"></div>
+
+<div class="buttons">
+<button id="yesBtn">Yes</button>
+</div>
+
+</div>
+
+<button id="noBtn">No</button>
+
+</div>
+
+<div id="celebration" class="celebration">
+
+<div class="bunny">🐰💃</div>
+<div class="love">I Love You ❤️</div>
+
+</div>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const bubble = document.getElementById("bubble");
+const bunny = document.getElementById("bunny");
+const celebration = document.getElementById("celebration");
+
+let scale = 1;
+let index = 0;
+
+const messages = [
+ "Are you sure? 🥺",
+ "Think again 💗",
+ "Don't break my heart 😢",
+ "One more chance?",
+ "Please say yes 💕"
+];
+
+teleport();
+
+function teleport(){
+ const x = Math.random() * (window.innerWidth - 120);
+ const y = Math.random() * (window.innerHeight - 80);
+ noBtn.style.left = x + "px";
+ noBtn.style.top = y + "px";
+}
+
+function onNo(){
+ teleport();
+
+ scale += 0.25;
+ yesBtn.style.transform = `scale(${scale})`;
+
+ bubble.textContent = messages[index % messages.length];
+ index++;
+
+ bunny.textContent="🐰😢";
+}
+
+noBtn.addEventListener("mouseover", onNo);
+noBtn.addEventListener("touchstart", onNo);
+
+yesBtn.onclick = () => {
+ celebration.style.display="flex";
+
+ for(let i=0;i<180;i++){
+   fire();
+ }
+};
+
+function fire(){
+ const f = document.createElement("div");
+ f.className="firework";
+ f.innerText = Math.random()>0.5 ? "🎆" : "🎉";
+
+ f.style.left = Math.random()*window.innerWidth+"px";
+ f.style.top = Math.random()*window.innerHeight+"px";
+
+ f.style.setProperty("--x",(Math.random()-0.5)*800+"px");
+ f.style.setProperty("--y",(Math.random()-0.5)*800+"px");
+
+ celebration.appendChild(f);
+
+ setTimeout(()=>f.remove(),1200);
+}
+
+</script>
+
+</body>
+</html>
